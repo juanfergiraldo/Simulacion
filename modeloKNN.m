@@ -1,4 +1,5 @@
 function modeloKNN (X, Y, k)
+
     n = size(X,1);
     porcentaje = round(n*0.7);
     rng('default');

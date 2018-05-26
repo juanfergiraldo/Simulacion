@@ -26,10 +26,12 @@ rept = 10; % Aqui establezco el numero de pliegues que se usaran para la validac
 numClases=length(unique(Y)); %%% Se determina el número de clases del problema.
 numMuestras=size(X,1); % Aqui determino cuantas son las muestras de entrenamiento
 
+balanceoSMOTE(Y, numClases, numMuestras);
 disp('1. K Vecinos más cercanos')
 disp('2. Ventana de Parzen')
-disp('3. Random Forest')
-disp('4. SVM')
+disp('3. RNA')
+disp('4. Random Forest')
+disp('5. SVM')
 switch input('Ingrese el numeral del modelo a elegir: ')   
     case 1      %%% modelo kNN %%%
         k = 4;
@@ -37,10 +39,14 @@ switch input('Ingrese el numeral del modelo a elegir: ')
     case 2      %%% modelo ventana de Parzen %%%
         h = 0.5;
         modeloParzenWindow(X, Y, h);
-    case 3 %%% modelo de Random forest
+    case 3      %%% modelo Redes Neuronales %%%
+        epocas = 100;
+        capas_neuronas = [15];
+        modeloRNA(X, Y, epocas, capas_neuronas, numMuestras);
+    case 4      %%% modelo de Random forest %%%
         numArboles = 10;
         modeloRandomForest(rept, numClases, numMuestras, numArboles, X, Y);
-    case 4 %%% modelo de SVM
+    case 5      %%% modelo de SVM %%%
         boxConstraint = 0.01;
         gamma = 0.01;
         tipoK = 1;
