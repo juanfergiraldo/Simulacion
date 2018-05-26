@@ -39,13 +39,10 @@ switch input('Ingrese el numeral del modelo a elegir: ')
         h = 0.5;
         modeloParzenWindow(X, Y, h);
     case 3      %%% modelo Redes Neuronales %%%
-        epocas = 100;
-        capas_neuronas = [15];
-        modeloRNA(X, Y, epocas, capas_neuronas, numMuestras);
-    case 4      %%% modelo de Random forest %%%
+    case 4      %%% modelo de Random forest
         numArboles = 10;
         modeloRandomForest(rept, numClases, numMuestras, numArboles, X, Y);
-    case 5      %%% modelo de SVM %%%
+    case 5      %%% modelo de SVM
         boxConstraint = 0.01;
         gamma = 0.01;
         tipoK = 1;
