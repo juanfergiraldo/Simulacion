@@ -23,16 +23,13 @@ switch drug
 end
 Y = change3Class(Yreal);    %%se transforma la salidas de 7 clases a 3
 
-rept = 10; % Aqui establezco el numero de pliegues que se usaran para la validacion cruzada y las iteraciones para entrenar (Deben ser las mismas)
-numClases=length(unique(Y)); %%% Se determina el número de clases del problema.
-numMuestras=size(X, 1); % Aqui determino cuantas son las muestras de entrenamiento
-
 if(drug == 1) %% Se hace SMOTE en la clase 3 de anfetamina (desbalance)
-    [X, Y] = tecnicaSMOTE(X, Y, numClases, numMuestras, 3);
+    [X, Y] = tecnicaSMOTE(X, Y, 3, 0.2);    %%% 20% de sobremuestreo artificial
 end
 if(drug == 2)
-    [X, Y] = tecnicaSMOTE(X, Y, numClases, numMuestras, 1);
-    [X, Y] = tecnicaSMOTE(X, Y, numClases, numMuestras, 2);
+    [X, Y] = tecnicaSMOTE(X, Y, 1, 0.2);    %%% 20% de sobremuestreo artificial
+    [X, Y] = tecnicaSMOTE(X, Y, 2, 0.2);    %%% 20% de sobremuestreo artificial
+    [X, Y] = tecnicaSubmuestreo(X, Y, 3, 0.1);   %%% 10% de submuestreo
 end
 disp('1. K Vecinos más cercanos')
 disp('2. Ventana de Parzen')
@@ -42,6 +39,11 @@ disp('5. SVM')
 disp('6. Selección variables - Correlación y Fisher')
 disp('7. Selección variables - SFS')
 disp('8. Extracción variables - PCA')
+
+rept = 10; % Aqui establezco el numero de pliegues que se usaran para la validacion cruzada y las iteraciones para entrenar (Deben ser las mismas)
+numClases=length(unique(Y)); %%% Se determina el número de clases del problema.
+numMuestras=size(X, 1); % Aqui determino cuantas son las muestras de entrenamiento
+
 switch input('Ingrese el numeral del modelo a elegir: ')   
     case 1      %%% modelo kNN %%%
         k = 4;
@@ -50,8 +52,8 @@ switch input('Ingrese el numeral del modelo a elegir: ')
         h = 0.5;
         modeloParzenWindow(X, Y, h);
     case 3      %%% modelo Redes Neuronales %%%
-        epocas = 100;
-        capas_neuronas = [15];
+        epocas = 10;
+        capas_neuronas = [24];
         modeloRNA(X, Y, epocas, capas_neuronas, numMuestras);
     case 4      %%% modelo de Random forest %%%
         numArboles = 10;

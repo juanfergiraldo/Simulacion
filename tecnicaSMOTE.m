@@ -1,8 +1,7 @@
-function [Xbalanceada, Ybalanceada] = tecnicaSMOTE(X, Y, numClases, numMuestras, claseDesbalanceada)
-    numClassDesbalanceada = sum(Y == claseDesbalanceada);
-    porcentajeSobreMuestreo = 0.2;
+function [Xbalanceada, Ybalanceada] = tecnicaSMOTE(X, Y, claseMayoritaria, porcentajeSobreMuestreo)
+    numClassDesbalanceada = sum(Y == claseMayoritaria);
     numMuestrasNuevas = porcentajeSobreMuestreo*numClassDesbalanceada;
-    indexClass = find(Y == claseDesbalanceada);
+    indexClass = find(Y == claseMayoritaria);
     for i=1:numMuestrasNuevas
         random1 = randsample(indexClass, 1);
         random2 = randsample(indexClass, 1);
@@ -14,7 +13,7 @@ function [Xbalanceada, Ybalanceada] = tecnicaSMOTE(X, Y, numClases, numMuestras,
         aux = abs(aux) * (-1 + 2.*rand());
         nuevaMuestra = media + aux;
         X = [X;nuevaMuestra];
-        Y = [Y;claseDesbalanceada];
+        Y = [Y;claseMayoritaria];
     end
     Xbalanceada = X;
     Ybalanceada = Y;
