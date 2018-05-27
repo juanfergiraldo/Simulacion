@@ -1,4 +1,4 @@
-function modeloRNA (X, Y, epochs, capas_neuronas, N)
+function modeloRNA (X, Y, epochs, capas_neuronas, numMuestras, rept)
 
     Yfinal = zeros(3,size(Y,1));
     for k = 1:length(Y)
@@ -15,19 +15,22 @@ function modeloRNA (X, Y, epochs, capas_neuronas, N)
     %%% Se hace la partición entre los conjuntos de entrenamiento y prueba.
     %%% Esta partición se hace forma aletoria %%%
 
-    porcentaje=round(N*0.7);
-    rng('default');
-    ind=randperm(N); %%% Se seleccionan los indices de forma aleatoria
+    %porcentaje=round(N*0.7);
+    %rng('default');
+    %ind=randperm(N); %%% Se seleccionan los indices de forma aleatoria
     
-    Errors = zeros(10,1);
+    %Errors = zeros(10,1);
     
-    for k = 1:10
-
-        Xtrain=X(ind(1:porcentaje),:);
-        Xtest=X(ind(porcentaje+1:end),:);
-
-        Ytrain=Yfinal(ind(1:porcentaje),:);
-        Ytest=Yfinal(ind(porcentaje+1:end),:);
+    EficienciaTest = zeros(1,rept);
+    
+    for fold = 1:rept
+        
+        rng('default');
+        particion=cvpartition(numMuestras,'Kfold',rept);
+        Xtrain=X(particion.training(fold),:);
+        Xtest=X(particion.test(fold),:);
+        Ytrain=Yfinal(particion.training(fold),:);
+        Ytest=Yfinal(particion.test(fold));
 
 
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -52,11 +55,11 @@ function modeloRNA (X, Y, epochs, capas_neuronas, N)
         %%% Se encuentra el error en la clasificación %%%
         error = perform(model, Ytest, Yesti);
         %classes = vec2ind(Yesti);
-        Errors(k,1) = error;        
+        EficienciaTest(fold,1) = 1 - error;        
         
     end
     
-    Texto=strcat('El Error en clasificación es: ', num2str(mean(Errors)));
+    Texto=strcat('La eficiencia en clasificación es: ', num2str(mean(EficienciaTest)));
     disp(Texto);
     
 end

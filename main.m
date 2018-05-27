@@ -54,7 +54,7 @@ switch input('Ingrese el numeral del modelo a elegir: ')
     case 3      %%% modelo Redes Neuronales %%%
         epocas = 10;
         capas_neuronas = [24];
-        modeloRNA(X, Y, epocas, capas_neuronas, numMuestras);
+        modeloRNA(X, Y, epocas, capas_neuronas, numMuestras, rept);
     case 4      %%% modelo de Random forest %%%
         numArboles = 10;
         modeloRandomForest(rept, numClases, numMuestras, numArboles, X, Y);
