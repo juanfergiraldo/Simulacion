@@ -10,7 +10,8 @@ disp('1. Amphetamine')
 disp('2. Caffeine')
 disp('3. Cannabis')
 disp('4. Nicotine')
-switch input('Seleccione la droga a analizar: ')
+drug = input('Seleccione la droga a analizar: ');
+switch drug
     case 1
         Yreal = DB(:,14);
     case 2
@@ -26,7 +27,13 @@ rept = 10; % Aqui establezco el numero de pliegues que se usaran para la validac
 numClases=length(unique(Y)); %%% Se determina el número de clases del problema.
 numMuestras=size(X, 1); % Aqui determino cuantas son las muestras de entrenamiento
 
-[X, Y] = balanceoSMOTE(X, Y, numClases, numMuestras);
+if(drug == 1) %% Se hace SMOTE en la clase 3 de anfetamina (desbalance)
+    [X, Y] = tecnicaSMOTE(X, Y, numClases, numMuestras, 3);
+end
+if(drug == 2)
+    [X, Y] = tecnicaSMOTE(X, Y, numClases, numMuestras, 1);
+    [X, Y] = tecnicaSMOTE(X, Y, numClases, numMuestras, 2);
+end
 disp('1. K Vecinos más cercanos')
 disp('2. Ventana de Parzen')
 disp('3. RNA')
