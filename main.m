@@ -12,14 +12,15 @@ disp('3. Cannabis')
 disp('4. Nicotine')
 switch input('Seleccione la droga a analizar: ')
     case 1
-        Y = DB(:,14);
+        Yreal = DB(:,14);
     case 2
-        Y = DB(:,17);
+        Yreal = DB(:,17);
     case 3
-        Y = DB(:,18);
+        Yreal = DB(:,18);
     case 4
-        Y = DB(:,29);
+        Yreal = DB(:,29);
 end
+Y = change3Class(Yreal);    %%se transforma la salidas de 7 clases a 3
 
 rept = 10; % Aqui establezco el numero de pliegues que se usaran para la validacion cruzada y las iteraciones para entrenar (Deben ser las mismas)
 numClases=length(unique(Y)); %%% Se determina el número de clases del problema.
