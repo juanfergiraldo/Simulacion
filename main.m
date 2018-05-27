@@ -46,10 +46,10 @@ numMuestras=size(X, 1); % Aqui determino cuantas son las muestras de entrenamien
 
 switch input('Ingrese el numeral del modelo a elegir: ')   
     case 1      %%% modelo kNN %%%
-        k = 4;
+        k = 7;
         modeloKNN(X, Y, k);
     case 2      %%% modelo ventana de Parzen %%%
-        h = 0.5;
+        h = 0.05;
         modeloParzenWindow(X, Y, h);
     case 3      %%% modelo Redes Neuronales %%%
         epocas = 10;

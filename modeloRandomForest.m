@@ -35,7 +35,7 @@ function modeloRandomForest(rept, numClases, numMuestras, numArboles, X, Y)
         
         MatrizConfusion = zeros(numClases,numClases);   
         for i=1:size(Xtest,1)
-           MatrizConfusion(Yest(i)+1,Ytest(i)+1) = MatrizConfusion(Yest(i)+1,Ytest(i)+1) + 1;
+           MatrizConfusion(Yest(i),Ytest(i)) = MatrizConfusion(Yest(i),Ytest(i)) + 1;
         end
         EficienciaTest(fold) = sum(diag(MatrizConfusion))/sum(sum(MatrizConfusion));
         
