@@ -39,8 +39,9 @@ disp('2. Ventana de Parzen')
 disp('3. RNA')
 disp('4. Random Forest')
 disp('5. SVM')
-disp('6. Análisis variables - Correlación y Fisher')
-disp('7. Análisis variables - SFS')
+disp('6. Selección variables - Correlación y Fisher')
+disp('7. Selección variables - SFS')
+disp('8. Extracción variables - PCA')
 switch input('Ingrese el numeral del modelo a elegir: ')   
     case 1      %%% modelo kNN %%%
         k = 4;
@@ -65,7 +66,9 @@ switch input('Ingrese el numeral del modelo a elegir: ')
         variableCorrelacionFisher(X, Y, alpha);   
     case 7      %%% SFS %%%
         variableSFS(X, Y, numMuestras, rept);
-        
+    case 8
+        umbralPorcentajeDeVarianza = 85; % Como ultimo parametro del sistema se establece el porcentaje de varianza que definira cuantos componentes se deben incluir para el sistema
+        variablePCA(X, Y, numMuestras, rept, umbralPorcentajeDeVarianza);    
     otherwise
         disp('Numero inválido')
 end
