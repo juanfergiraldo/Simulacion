@@ -10,6 +10,13 @@ function modeloKNN (X, Y, k)
 
     Ytrain = Y(ind(1:porcentaje),:);
     Ytest = Y(ind(porcentaje+1:end),:);
+    
+    %%% Normalizaci�n %%%
+
+    [Xtrain,mu,sigma]=zscore(Xtrain);
+    Xtest=normalizar(Xtest,mu,sigma);
+
+    %%%%%%%%%%%%%%%%%%%%%
 
     Yesti = kNN(Xtest,Xtrain,Ytrain,k);
     

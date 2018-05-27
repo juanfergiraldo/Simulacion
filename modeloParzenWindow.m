@@ -10,31 +10,26 @@ function modeloKNN (X, Y, h)
     Ytrain = Y(ind(1:porcentaje),:);
     Ytest = Y(ind(porcentaje+1:end),:);
 
-    ind0=Ytrain==0;
+    %%% Normalizaci�n %%%
+    
+    [Xtrain,mu,sigma]=zscore(Xtrain);
+    Xtest=normalizar(Xtest,mu,sigma);
+    
+    %%%%%%%%%%%%%%%%%%%%%
+    
     ind1=Ytrain==1;
     ind2=Ytrain==2;
     ind3=Ytrain==3;
-    ind4=Ytrain==4;
-    ind5=Ytrain==5;
-    ind6=Ytrain==6;
 
-    Xtrain0=Xtrain(ind0,:);
     Xtrain1=Xtrain(ind1,:);
     Xtrain2=Xtrain(ind2,:);
     Xtrain3=Xtrain(ind3,:);
-    Xtrain4=Xtrain(ind4,:);
-    Xtrain5=Xtrain(ind5,:);
-    Xtrain6=Xtrain(ind6,:);
 
-    funcion0=parzenWindow(Xtest,Xtrain0,Ytrain,h);
     funcion1=parzenWindow(Xtest,Xtrain1,Ytrain,h);
     funcion2=parzenWindow(Xtest,Xtrain2,Ytrain,h);
     funcion3=parzenWindow(Xtest,Xtrain3,Ytrain,h);
-    funcion4=parzenWindow(Xtest,Xtrain4,Ytrain,h);
-    funcion5=parzenWindow(Xtest,Xtrain5,Ytrain,h);
-    funcion6=parzenWindow(Xtest,Xtrain6,Ytrain,h);
 
-    funcion=[funcion0,funcion1,funcion2,funcion3,funcion4,funcion5,funcion6];
+    funcion=[funcion1,funcion2,funcion3];
 
     [~,Yesti]=max(funcion,[],2);
 

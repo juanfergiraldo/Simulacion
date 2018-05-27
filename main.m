@@ -24,9 +24,9 @@ Y = change3Class(Yreal);    %%se transforma la salidas de 7 clases a 3
 
 rept = 10; % Aqui establezco el numero de pliegues que se usaran para la validacion cruzada y las iteraciones para entrenar (Deben ser las mismas)
 numClases=length(unique(Y)); %%% Se determina el número de clases del problema.
-numMuestras=size(X,1); % Aqui determino cuantas son las muestras de entrenamiento
+numMuestras=size(X, 1); % Aqui determino cuantas son las muestras de entrenamiento
 
-balanceoSMOTE(Y, numClases, numMuestras);
+[X, Y] = balanceoSMOTE(X, Y, numClases, numMuestras);
 disp('1. K Vecinos más cercanos')
 disp('2. Ventana de Parzen')
 disp('3. RNA')
