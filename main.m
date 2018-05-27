@@ -40,7 +40,7 @@ disp('3. RNA')
 disp('4. Random Forest')
 disp('5. SVM')
 disp('6. Análisis variables - Correlación y Fisher')
-disp('6. Análisis variables - Correlación y Fisher')
+disp('7. Análisis variables - SFS')
 switch input('Ingrese el numeral del modelo a elegir: ')   
     case 1      %%% modelo kNN %%%
         k = 4;
@@ -60,10 +60,11 @@ switch input('Ingrese el numeral del modelo a elegir: ')
         gamma = 0.01;
         tipoK = 1;
         modeloSVM(rept, numClases, numMuestras, boxConstraint, gamma, tipoK, X, Y);
-    case 6
+    case 6      %%% Correlacion y Fisher %%%
         alpha = 0.05;
         variableCorrelacionFisher(X, Y, alpha);   
-    case 7
+    case 7      %%% SFS %%%
+        variableSFS(X, Y, numMuestras, rept);
         
     otherwise
         disp('Numero inválido')

@@ -40,6 +40,7 @@ disp('3. RNA')
 disp('4. Random Forest')
 disp('5. SVM')
 disp('6. Análisis variables - Correlación y Fisher')
+disp('6. Análisis variables - Correlación y Fisher')
 switch input('Ingrese el numeral del modelo a elegir: ')   
     case 1      %%% modelo kNN %%%
         k = 4;
@@ -61,48 +62,75 @@ switch input('Ingrese el numeral del modelo a elegir: ')
         modeloSVM(rept, numClases, numMuestras, boxConstraint, gamma, tipoK, X, Y);
     case 6
         alpha = 0.05;
-        X = zscore(X);
-        [correlacion,p]= corrcoef([X,Y],'alpha',alpha);
-        figure(1); plot3(correlacion); title('Matriz De Correlacion X');
-        figure(2); imagesc(correlacion); colorbar;
-        figure(3); plot3(p); title('Matriz De Valores P');
-        indicesClase1 = find(Y == 1);
-        indicesClase2 = find(Y == 2);
-        indicesClase3 = find(Y == 3);
-        
-        mediaClase1 = mean(X(indicesClase1,:) ,1);
-        mediaClase2 = mean(X(indicesClase2,:) ,1);
-        mediaClase3 = mean(X(indicesClase3,:) ,1);        
-        media = [mediaClase1; mediaClase2; mediaClase3];
-        
-        varClase1 = var(X(indicesClase1,:) ,1);
-        varClase2 = var(X(indicesClase2,:) ,1);
-        varClase3 = var(X(indicesClase3,:) ,1);
+        variableCorrelacionFisher(X, Y, alpha);   
+    case 7
+         %(SFS)
     
-        varianza = [varClase1; varClase2; varClase3];
+    Rept=10; %Pliegues para la validación cruzada
+    NumMuestras=size(X,1); %Muestras de entrenamiento
+    EficienciaTest=zeros(1,Rept); %Vector con la eficiencia de los modelos en cada iteración
+    
+    %Variables para el proceso de seleccion de caracteriticas
+    %Si desea ver los resultados en cada iteracion use 'iter', pero si solo desea ver el resultado final use 'final'
+    opciones = statset('display','iter');
+    %Use 'forward' para busqueda hacia adelante o 'backward' para busqueda hacia atras
+    sentido = 'forward'; 
+    
+    %Selección de caracteristicas:
+    %en el primer return estara 0 o 1 si se incluye o no la caracteristica
+    %en el segundo return se guarda el historial de las caracteristicas añadidas.
+    [caracteristicasElegidas, proceso] = sequentialfs(@funcionForest,X,Y,'direction',sentido,'options',opciones);
+    
+    %Se dejan las caracteristicas a trabajar, antes del entrenamiento y validación del modelo.
+    X = X(:, caracteristicasElegidas);
+    
+    %Entrenamiento y validacion del sistema
+    for fold=1:Rept
+        %Se particionan las muestras de entrenamiento y prueba%
+        rng('default');
+        particion=cvpartition(NumMuestras,'Kfold',Rept);
+        indices=particion.training(fold);
+        Xtrain=X(particion.training(fold),:);
+        Xtest=X(particion.test(fold),:);
+        Ytrain=Y(particion.training(fold));
+        Ytest=Y(particion.test(fold));  
         
-        coef = zeros(1,12);
-        for i=1:2
-            for j=1:2
-                if (j ~= i)
-                    numerador = (media(i,:) - media(j,:)).^2;
-                    denominador = varianza(i,:) + varianza(j,:);
-                    coef = coef + (numerador./denominador);
-                end
-            end
-        end
-        Texto = ['Indice de Fisher: ', num2str(coef)];
-        disp(Texto);
+        %Normalización de datos%
+        [Xtrain,mu,sigma] = zscore(Xtrain);
+        Xtest = (Xtest - repmat(mu,size(Xtest,1),1))./repmat(sigma,size(Xtest,1),1);
         
-        coefN = coef./max(coef);
-        Texto = ['Indice de Fisher Normalizado: ', num2str(coefN)];
-        disp(Texto);
+        % Estas instrucciones lo que hacen es que realizan la seleccion de caracteristicas en cada iteracion. Pero esto es muy demorado!!
         
-        figure(4)
-        ejeX = 1:12;
-        stem(ejeX, coefN);
-        title('Indices Fisher Normalizados');
+% % % % %         [caracteristicasElegidas, proceso] = sequentialfs(@funcionForest,Xtrain,Ytrain,'direction',sentido,'options',opciones);
+% % % % %         XReducidas = X(:, caracteristicasElegidas);
+% % % % %         [NumMuestras,~] = size(XReducidas);
+% % % % %         indices=randperm(NumMuestras);
+% % % % %         porcionEntrenamiento = round(NumMuestras*0.7);
+% % % % %         Xtrain=XReducidas (indices(1:porcionEntrenamiento),:);
+% % % % %         Xtest=XReducidas(indices(porcionEntrenamiento+1:end),:);
+% % % % %         Ytrain=Y(indices(1:porcionEntrenamiento),:);
+% % % % %         Ytest=Y(indices(porcionEntrenamiento+1:end),:);
         
+        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+        
+        %Entrenamiento del modelo
+        NumArboles=10;
+        Modelo = TreeBagger(NumArboles,Xtrain,Ytrain);
+        
+        %Se hayan las predicciones del modelo según el modelo
+        %entrenado y las muestras separadas para la validacion
+        Yest = predict(Modelo,Xtest);
+        Yest = str2double(Yest);
+        
+        %Y se calcula la eficiencia de la iteracion
+        EficienciaTest(fold) = sum(Ytest == Yest)/length(Ytest);
+    end
+    
+    %Se muestra cuál fue la eficiencia promedio del sistema
+    Eficiencia = mean(EficienciaTest);
+    IC = std(EficienciaTest);
+    Texto=['La eficiencia obtenida fue = ', num2str(Eficiencia),' +- ',num2str(IC)];
+    disp(Texto);
     otherwise
         disp('Numero inválido')
 end
