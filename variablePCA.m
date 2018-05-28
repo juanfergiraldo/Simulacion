@@ -1,4 +1,4 @@
-function variablePCA(X, Y, numMuestras, rept, umbralPorcentajeDeVarianza)
+function variablePCA(X, Y, numMuestras, rept, umbralPorcentajeDeVarianza, numArboles)
     EficienciaTest=zeros(1,rept); % Se inicializa un vector columna en donde se guardara la eficiencia de los modelos en cada iteracion
 
     for fold=1:rept
@@ -80,8 +80,7 @@ function variablePCA(X, Y, numMuestras, rept, umbralPorcentajeDeVarianza)
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
         % Se hace el entrenamiento del modelo
-        NumArboles=15;
-        Modelo = TreeBagger(NumArboles,Xtrain,Ytrain);
+        Modelo = TreeBagger(numArboles,Xtrain,Ytrain);
 
         % Se obtienen las predicciones del modelo con base al modelo
         % entrenado y las muestras separadas para la validacion del sistema

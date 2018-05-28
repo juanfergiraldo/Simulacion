@@ -1,4 +1,4 @@
-function variableSFS(X, Y, numMuestras, rept)
+function variableSFS(X, Y, numMuestras, rept, numArboles)
 
     EficienciaTest=zeros(1,rept); %Vector con la eficiencia de los modelos en cada iteración
     %Variables para el proceso de seleccion de caracteriticas
@@ -45,8 +45,7 @@ function variableSFS(X, Y, numMuestras, rept)
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
         %Entrenamiento del modelo
-        NumArboles=10;
-        Modelo = TreeBagger(NumArboles,Xtrain,Ytrain);
+        Modelo = TreeBagger(numArboles,Xtrain,Ytrain);
 
         %Se hayan las predicciones del modelo según el modelo
         %entrenado y las muestras separadas para la validacion
