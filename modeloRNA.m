@@ -55,11 +55,11 @@ function modeloRNA (X, Y, epochs, capas_neuronas, numMuestras, rept)
         %%% Se encuentra el error en la clasificación %%%
         error = perform(model, Ytest, Yesti);
         %classes = vec2ind(Yesti);
-        ErrorTest(fold,1) = error;        
-        
+        ErrorTest(fold,1) = error;
     end
+    
     IC = std(ErrorTest);
     Texto=strcat('La eficiencia en clasificación es: ', num2str(mean(ErrorTest)),' +- ',num2str(IC));
-    disp(Texto);
+    disp(Texto);   
     
 end

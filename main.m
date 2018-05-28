@@ -23,14 +23,14 @@ switch drug
 end
 Y = change3Class(Yreal);    %%se transforma la salidas de 7 clases a 3
 
-if(drug == 1) %% Se hace SMOTE en la clase 3 de anfetamina (desbalance)
-    [X, Y] = tecnicaSMOTE(X, Y, 3, 0.2);    %%% 20% de sobremuestreo artificial
-end
-if(drug == 2)
-    [X, Y] = tecnicaSMOTE(X, Y, 1, 0.2);    %%% 20% de sobremuestreo artificial
-    [X, Y] = tecnicaSMOTE(X, Y, 2, 0.2);    %%% 20% de sobremuestreo artificial
-    [X, Y] = tecnicaSubmuestreo(X, Y, 3, 0.1);   %%% 10% de submuestreo
-end
+%if(drug == 1) %% Se hace SMOTE en la clase 3 de anfetamina (desbalance)
+ %   [X, Y] = tecnicaSMOTE(X, Y, 3, 0.2);    %%% 20% de sobremuestreo artificial
+%end
+%if(drug == 2)
+ %   [X, Y] = tecnicaSMOTE(X, Y, 1, 0.2);    %%% 20% de sobremuestreo artificial
+ %   [X, Y] = tecnicaSMOTE(X, Y, 2, 0.2);    %%% 20% de sobremuestreo artificial
+ %   [X, Y] = tecnicaSubmuestreo(X, Y, 3, 0.1);   %%% 10% de submuestreo
+%end
 disp('1. K Vecinos más cercanos')
 disp('2. Ventana de Parzen')
 disp('3. RNA')
@@ -46,21 +46,21 @@ numMuestras=size(X, 1); % Aqui determino cuantas son las muestras de entrenamien
 
 switch input('Ingrese el numeral del modelo a elegir: ')   
     case 1      %%% modelo kNN %%%
-        k = 100;
+        k = 6;
         modeloKNN(numClases, X, Y, k);
     case 2      %%% modelo ventana de Parzen %%%
-        h = 10;
+        h = 0.9;
         modeloParzenWindow(numClases, X, Y, h);
     case 3      %%% modelo Redes Neuronales %%%
         epocas = 10;
         capas_neuronas = [20];
         modeloRNA(X, Y, epocas, capas_neuronas, numMuestras, rept);
     case 4      %%% modelo de Random forest %%%
-        numArboles = 500;
+        numArboles = 40;
         modeloRandomForest(rept, numClases, numMuestras, numArboles, X, Y);
     case 5      %%% modelo de SVM %%%
-        boxConstraint = 100;
-        gamma = 100;
+        boxConstraint = 1;
+        gamma = 10;
         tipoK = 2;
         modeloSVM(rept, numClases, numMuestras, boxConstraint, gamma, tipoK, X, Y);
     case 6      %%% Correlacion y Fisher %%%

@@ -46,8 +46,12 @@ function modeloParzenWindow(numClases, X, Y, h)
     
     Eficiencia=(sum(Yesti==Ytest))/length(Ytest);
     Error=1-Eficiencia;
-
+    ICE = std(EficienciaClase);
+    ICP = std(PresicionClase);
+    
     disp(strcat('La eficiencia en prueba es: ',{' '},num2str(Eficiencia)));
     disp(strcat('El error de clasificación en prueba es: ',{' '},num2str(Error)));
     disp(MatrizConfusion);
+    disp(strcat('La eficiencia por clase obtenida fue: ', num2str(EficienciaClase), ' +-', num2str(ICE)));
+    disp(strcat('La precision por clase obtenida fue: ', num2str(PresicionClase), ' +-', num2str(ICP)));
 end

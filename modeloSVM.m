@@ -86,11 +86,22 @@ function modeloSVM(rept, numClases, numMuestras, boxConstraint, gamma, tipoK, X,
             MatrizConfusion(Yest(i),Ytest(i))=MatrizConfusion(Yest(i),Ytest(i)) + 1;
         end
         EficienciaTest(fold)=sum(diag(MatrizConfusion))/sum(sum(MatrizConfusion));
-        
+        PrecisionClase=[];
+        EficienciaClase=[];
+        for i=1:size(MatrizConfusion,1)
+            PresicionClase(i)=MatrizConfusion(i,i)/sum(MatrizConfusion(:,i));
+            EficienciaClase(i)=MatrizConfusion(i,i)/sum(MatrizConfusion(i,:));
+        end
     end
     
     Eficiencia = mean(EficienciaTest);
     IC = std(EficienciaTest);
+    ICE = std(EficienciaClase);
+    ICP = std(PresicionClase);
+    
     Texto=['La eficiencia obtenida fue = ', num2str(Eficiencia),' +- ',num2str(IC)];
     disp(Texto);
+    disp(MatrizConfusion);
+    disp(strcat('La eficiencia por clase obtenida fue: ', num2str(EficienciaClase), ' +-', num2str(ICE)));
+    disp(strcat('La precision por clase obtenida fue: ', num2str(PresicionClase), ' +-', num2str(ICP)));  
 end
