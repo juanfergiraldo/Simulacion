@@ -52,8 +52,8 @@ switch input('Ingrese el numeral del modelo a elegir: ')
         h = 10;
         modeloParzenWindow(numClases, X, Y, h);
     case 3      %%% modelo Redes Neuronales %%%
-        epocas = 10;
-        capas_neuronas = [20];
+        epocas = 500;
+        capas_neuronas = [24];
         modeloRNA(X, Y, epocas, capas_neuronas, numMuestras, rept);
     case 4      %%% modelo de Random forest %%%
         numArboles = 500;
@@ -67,10 +67,12 @@ switch input('Ingrese el numeral del modelo a elegir: ')
         alpha = 0.05;
         variableCorrelacionFisher(X, Y, alpha);   
     case 7      %%% SFS %%%
-        variableSFS(X, Y, numMuestras, rept);
+        numArboles = 5;
+        variableSFS(X, Y, numMuestras, rept, numArboles);
     case 8
-        umbralPorcentajeDeVarianza = 85; % Como ultimo parametro del sistema se establece el porcentaje de varianza que definira cuantos componentes se deben incluir para el sistema
-        variablePCA(X, Y, numMuestras, rept, umbralPorcentajeDeVarianza);    
+        numArboles = 20;
+        umbralPorcentajeDeVarianza = 90; % Como ultimo parametro del sistema se establece el porcentaje de varianza que definira cuantos componentes se deben incluir para el sistema
+        variablePCA(X, Y, numMuestras, rept, umbralPorcentajeDeVarianza, numArboles);    
     otherwise
         disp('Numero inválido')
 end
