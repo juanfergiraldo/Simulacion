@@ -47,10 +47,10 @@ numMuestras=size(X, 1); % Aqui determino cuantas son las muestras de entrenamien
 switch input('Ingrese el numeral del modelo a elegir: ')   
     case 1      %%% modelo kNN %%%
         k = 100;
-        modeloKNN(numClases, X, Y, k);
+        modeloKNN(X, Y, k);
     case 2      %%% modelo ventana de Parzen %%%
         h = 10;
-        modeloParzenWindow(numClases, X, Y, h);
+        modeloParzenWindow(X, Y, h);
     case 3      %%% modelo Redes Neuronales %%%
         epocas = 10;
         capas_neuronas = [24];
@@ -59,8 +59,8 @@ switch input('Ingrese el numeral del modelo a elegir: ')
         numArboles = 500;
         modeloRandomForest(rept, numClases, numMuestras, numArboles, X, Y);
     case 5      %%% modelo de SVM %%%
-        boxConstraint = 100;
-        gamma = 100;
+        boxConstraint = 0.1;
+        gamma = 0.01;
         tipoK = 2;
         modeloSVM(rept, numClases, numMuestras, boxConstraint, gamma, tipoK, X, Y);
     case 6      %%% Correlacion y Fisher %%%
